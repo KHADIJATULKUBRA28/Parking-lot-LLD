@@ -27,3 +27,28 @@ public class ParkingFloor {
         return null;
     }
 }"""
+from typing import Dict, Optional
+
+from enums.VehicleType import VehicleType
+from model.ParkingSpot import ParkingSpot
+
+
+class ParkingFloor:
+    def __init__(self, id: str):
+        self._id = id
+        self._spots: Dict[str, ParkingSpot] = {}
+
+    def getId(self) -> str:
+        return self._id
+
+    def getSpots(self) -> Dict[str, ParkingSpot]:
+        return self._spots
+
+    def addSpot(self, spot: ParkingSpot) -> None:
+        self._spots[spot.getId()] = spot
+
+    def findAvailableSpot(self, vehicleType: VehicleType) -> Optional[ParkingSpot]:
+        for spot in list(self._spots.values()):
+            if spot.getAllowedType() == vehicleType and spot.tryOccupy():
+                return spot
+        return None

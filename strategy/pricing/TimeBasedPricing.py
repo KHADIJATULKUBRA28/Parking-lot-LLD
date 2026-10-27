@@ -54,25 +54,51 @@ public class TimeBasedPricing implements PricingStrategy {
 }
 '''
 import math
+from datetime import datetime, time, timedelta
 
+from enums.VehicleType import VehicleType
 from strategy.pricing.PricingStrategy import PricingStrategy
 
 
 class TimeBasedPricing(PricingStrategy):
-    """Slab pricing: first 2 hours at 10/hr, next 3 at 15/hr, rest at 20/hr."""
+    # Peak period hours (e.g., 8:00 to 17:00)
+    PEAK_START = time(8, 0)
+    PEAK_END = time(17, 0)
 
-    SLABS = [(2, 10), (3, 15)]
-    DEFAULT_RATE = 20
+    def _isPeak(self, t: time) -> bool:
+        return not t < self.PEAK_START and not t > self.PEAK_END
 
-    def calculate_price(self, duration_hours):
-        remaining = math.ceil(duration_hours)
-        total = 0
+    def calculateFee(self, type: VehicleType, entryTime: datetime, exitTime: datetime) -> float:
+        if exitTime < entryTime:
+            raise ValueError("Exit time before entry time")
 
-        for slab_hours, rate in self.SLABS:
-            hours = min(remaining, slab_hours)
-            total += hours * rate
-            remaining -= hours
-            if remaining <= 0:
-                return total
+        durationMinutes = int((exitTime - entryTime).total_seconds() / 60)
+        totalHours = math.ceil(durationMinutes / 60.0)
 
-        return total + remaining * self.DEFAULT_RATE
+        # Count peak hours and non-peak hours by iterating hour by hour
+        peakHours = 0
+        nonPeakHours = 0
+
+        cursor = entryTime.replace(minute=0, second=0, microsecond=0)
+        # If entry time has minutes, consider first hour partially occupied, count as 1 hour anyway (already rounded)
+        for i in range(totalHours):
+            hourStart = cursor.time()
+            if self._isPeak(hourStart):
+                peakHours += 1
+            else:
+                nonPeakHours += 1
+            cursor = cursor + timedelta(hours=1)
+
+        peakRate = {
+            VehicleType.CAR: 30.0,
+            VehicleType.BIKE: 15.0,
+            VehicleType.TRUCK: 50.0,
+        }[type]
+
+        nonPeakRate = {
+            VehicleType.CAR: 20.0,
+            VehicleType.BIKE: 10.0,
+            VehicleType.TRUCK: 30.0,
+        }[type]
+
+        return peakHours * peakRate + nonPeakHours * nonPeakRate

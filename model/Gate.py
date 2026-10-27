@@ -11,3 +11,18 @@ public abstract class Gate {
 
     public abstract GateType getType();
 }"""
+from abc import ABC, abstractmethod
+
+from enums.GateType import GateType
+
+
+class Gate(ABC):
+    def __init__(self, id: str):
+        self._id = id
+
+    def getId(self) -> str:
+        return self._id
+
+    @abstractmethod
+    def getType(self) -> GateType:
+        pass

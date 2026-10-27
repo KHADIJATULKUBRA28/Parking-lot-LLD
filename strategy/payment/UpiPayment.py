@@ -11,11 +11,11 @@ public class UpiPayment implements PaymentStrategy {
     }
 }
 '''
-from .PaymentStrategy import PaymentStrategy
-from ...model.Ticket import Ticket
+from model.Ticket import Ticket
+from strategy.payment.PaymentStrategy import PaymentStrategy
 
 
-class UPIPayment(PaymentStrategy):
+class UpiPayment(PaymentStrategy):
     def processPayment(self, ticket: Ticket, amount: float) -> bool:
-        print(f"Paid ₹{amount} for ticket {ticket.getTicketId()} via UPI.")
+        print("Paid ₹" + str(amount) + " for ticket " + ticket.getTicketId() + " via UPI.")
         return True

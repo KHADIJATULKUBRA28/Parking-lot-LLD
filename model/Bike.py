@@ -7,8 +7,9 @@ public class Bike extends Vehicle {
     public Bike(String number) { super(number, VehicleType.BIKE); }
 }
 """
-from .Vehicle import Vehicle
-from ..enums import VehicleType
+from enums.VehicleType import VehicleType
+from model.Vehicle import Vehicle
+
 
 class Bike(Vehicle):
     def __init__(self, number: str):

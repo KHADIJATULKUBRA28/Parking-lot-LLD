@@ -11,11 +11,11 @@ public class CardPayment implements PaymentStrategy {
     }
 }
 '''
-from .PaymentStrategy import PaymentStrategy
-from ...model.Ticket import Ticket
+from model.Ticket import Ticket
+from strategy.payment.PaymentStrategy import PaymentStrategy
 
 
 class CardPayment(PaymentStrategy):
     def processPayment(self, ticket: Ticket, amount: float) -> bool:
-        print(f"Paid ₹{amount} for ticket {ticket.getTicketId()} via Card.")
+        print("Paid ₹" + str(amount) + " for ticket " + ticket.getTicketId() + " via Card.")
         return True

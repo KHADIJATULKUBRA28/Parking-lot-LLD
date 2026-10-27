@@ -14,3 +14,20 @@ public class VehicleFactory {
     }
 }
 """
+from enums.VehicleType import VehicleType
+from model.Vehicle import Vehicle
+from model.Car import Car
+from model.Bike import Bike
+from model.Truck import Truck
+
+
+class VehicleFactory:
+    @staticmethod
+    def create(number: str, type: VehicleType) -> Vehicle:
+        if type == VehicleType.CAR:
+            return Car(number)
+        elif type == VehicleType.BIKE:
+            return Bike(number)
+        elif type == VehicleType.TRUCK:
+            return Truck(number)
+        raise ValueError(f"Unsupported vehicle type: {type}")

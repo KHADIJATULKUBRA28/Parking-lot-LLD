@@ -11,3 +11,18 @@ public abstract class Vehicle {
     private final VehicleType type;
 }
 '''
+from abc import ABC
+
+from enums.VehicleType import VehicleType
+
+
+class Vehicle(ABC):
+    def __init__(self, number: str, type: VehicleType):
+        self._number = number
+        self._type = type
+
+    def getNumber(self) -> str:
+        return self._number
+
+    def getType(self) -> VehicleType:
+        return self._type

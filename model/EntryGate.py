@@ -22,3 +22,21 @@ public class EntryGate extends Gate {
     }
 }
 """
+from datetime import datetime
+
+from enums.GateType import GateType
+from model.Gate import Gate
+from model.Ticket import Ticket
+from model.Vehicle import Vehicle
+
+
+class EntryGate(Gate):
+    def __init__(self, id: str):
+        super().__init__(id)
+
+    def getType(self) -> GateType:
+        return GateType.ENTRY
+
+    def parkVehicle(self, vehicle: Vehicle, entryTime: datetime) -> Ticket:
+        from service.ParkingLot import ParkingLot
+        return ParkingLot.getInstance().parkVehicle(vehicle, entryTime)

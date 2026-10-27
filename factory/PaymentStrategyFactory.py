@@ -14,23 +14,20 @@ public class PaymentStrategyFactory {
     }
 }
 """
-from ..enums.PaymentMode import PaymentMode
-from ..strategy.payment.PaymentStrategy import PaymentStrategy
-from ..strategy.payment.CashPayment import CashPayment
-from ..strategy.payment.UpiPayment import UpiPayment
-from ..strategy.payment.CardPayment import CardPayment
-from ..strategy.payment.NetBankingPayment import NetBankingPayment
+from enums.PaymentMode import PaymentMode
+from strategy.payment.PaymentStrategy import PaymentStrategy
+from strategy.payment.CashPayment import CashPayment
+from strategy.payment.UpiPayment import UpiPayment
+from strategy.payment.CardPayment import CardPayment
 
 
 class PaymentStrategyFactory:
     @staticmethod
     def get(mode: PaymentMode) -> PaymentStrategy:
-        match mode:
-            case PaymentMode.CASH:
-                return CashPayment()
-            case PaymentMode.UPI:
-                return UpiPayment()
-            case PaymentMode.CARD:
-                return CardPayment()
-            case PaymentMode.NETBANKING:
-                return NetBankingPayment()
+        if mode == PaymentMode.CASH:
+            return CashPayment()
+        elif mode == PaymentMode.UPI:
+            return UpiPayment()
+        elif mode == PaymentMode.CARD:
+            return CardPayment()
+        raise ValueError(f"Unsupported payment mode: {mode}")

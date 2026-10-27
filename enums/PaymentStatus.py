@@ -1,5 +1,7 @@
-from enum import Enum 
+from enum import Enum
+
+
 class PaymentStatus(Enum):
-    PENDING ="PENDING"
+    PENDING = "PENDING"
     SUCCESS = "SUCCESS"
-    FAILED ="failed"
+    FAILED = "FAILED"

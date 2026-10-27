@@ -10,10 +10,12 @@ public interface PricingStrategy {
 }
 '''
 from abc import ABC, abstractmethod
+from datetime import datetime
+
+from enums.VehicleType import VehicleType
 
 
 class PricingStrategy(ABC):
     @abstractmethod
-    def calculate_price(self, duration_hours):
-        """Return the parking price for the given duration in hours."""
+    def calculateFee(self, type: VehicleType, entryTime: datetime, exitTime: datetime) -> float:
         pass
